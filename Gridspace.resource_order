@@ -17,6 +17,7 @@
     {"name":"Timelines","order":8,"path":"folders/Timelines.yy",},
   ],
   "ResourceOrderSettings": [
+    {"name":"spr_saucer","order":3,"path":"sprites/spr_saucer/spr_saucer.yy",},
     {"name":"spr_glider","order":2,"path":"sprites/spr_glider/spr_glider.yy",},
     {"name":"spr_player","order":1,"path":"sprites/spr_player/spr_player.yy",},
   ],

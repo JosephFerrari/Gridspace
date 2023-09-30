@@ -39,6 +39,8 @@ function str_entity(_x, _y, _spr, _actions = noone) constructor
 	spr = _spr;
 	w = sprite_get_width(spr) / TILE;
 	h = sprite_get_height(spr) / TILE;
+	x -= floor(w / 2);
+	y -= floor(h / 2);
 	
 	actions = _actions;
 	action_index = 0;
@@ -64,10 +66,14 @@ function str_entity(_x, _y, _spr, _actions = noone) constructor
 			{
 				var entity = global.entities[| i];
 				if (entity == self) continue;
-				if (x_proposal == entity.x && y_proposal == entity.y) reject = true;
+				if (x_proposal < entity.x + entity.w && x_proposal + w > entity.x && y_proposal < entity.y + entity.h && y_proposal + h > entity.y) reject = true;
 			}
 		}
-		if (reject && action.x != 0) dir *= -1;
+		if (reject && action.x != 0)
+		{
+			dir *= -1;
+			action_index--;
+		}
 		x_cache = x;
 		y_cache = y;
 		if (!reject)
@@ -102,7 +108,7 @@ function create_actions()
 function action_horizontal(_x) { return new str_action(_x, 0); }
 function action_vertical(_y) { return new str_action(0, _y); }
 
-function spawn_glider(_x) { return new str_entity(_x, -1, spr_glider, create_actions(action_vertical(1), action_horizontal(1))); }
+function spawn_glider(_x) { return new str_entity(_x, -1, spr_saucer, create_actions(action_vertical(1), action_horizontal(1))); }
 
 // Entities
 

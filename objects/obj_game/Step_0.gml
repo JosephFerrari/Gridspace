@@ -18,7 +18,7 @@ if (active_entity == noone)
 	if (left || right || up || down) active_entity = player;
 }
 
-// Action
+// Action Queue
 
 if (active_entity != noone)
 {
