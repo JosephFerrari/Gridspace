@@ -29,11 +29,11 @@ if (active_entity != noone)
 		active_entity.act();
 		transition = 0;
 	}
-	transition += (delta_time / 1000000) * 20;
+	transition += (delta_time / 1000000) * 10;
 	if (transition >= 1)
 	{
-		next_entity();
 		transition = 0;
+		next_entity();
 	}
 }
 
