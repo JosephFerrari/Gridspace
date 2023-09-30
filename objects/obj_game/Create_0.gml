@@ -6,9 +6,33 @@
 #macro WIDTH 7
 #macro HEIGHT 11
 
+// Utility
+
+function smooth(_value)
+{
+	return (dsin((_value * 180) - 90) + 1) / 2;
+}
+
+// Control
+
+global.entities = ds_list_create();
+active_entity = noone;
+transition = 0;
+
+function next_entity()
+{
+	var index = ds_list_find_index(global.entities, active_entity) + 1;
+	if (index < ds_list_size(global.entities)) active_entity = global.entities[| index];
+	else
+	{
+		active_entity = noone;
+		transition = 0;
+	}
+}
+
 // Structs
 
-function str_entity(_x, _y, _spr, _actions) constructor
+function str_entity(_x, _y, _spr, _actions = noone) constructor
 {
     x = floor(_x);
     y = floor(_y);
@@ -18,25 +42,40 @@ function str_entity(_x, _y, _spr, _actions) constructor
 	
 	actions = _actions;
 	action_index = 0;
-	dir = sign(ceil(WIDTH / 2) - x);
+	dir = sign(floor(WIDTH / 2) - x);
 	
-	static move = function(_x, _y)
-	{
-		_x *= dir;
-		if (x + _x < 0 || x + _x > WIDTH - w)
-		{
-			dir *= -1;
-			_x *= -1;
-		}
-		x = clamp(x + _x, 0, WIDTH - w);
-		y = clamp(y + _y, 0, HEIGHT - h);
-	}
+	x_proposal = x;
+	y_proposal = y;
+	x_cache = x;
+	y_cache = y;
 	
 	static act = function()
 	{
 		if (actions == noone) return;
 		var action = actions[action_index];
-		if (action.x != 0 || action.y != 0) move(action.x, action.y);
+		
+		x_proposal = x + action.x * (dir == 0 ? 1 : dir);
+		y_proposal = y + action.y;
+		var reject = false;
+		if (x_proposal < 0 || x_proposal > WIDTH - w || y_proposal < 0 || y_proposal > HEIGHT - h) reject = true;
+		if (ds_exists(global.entities, ds_type_list))
+		{
+			for (var i = 0; i < ds_list_size(global.entities); i++)
+			{
+				var entity = global.entities[| i];
+				if (entity == self) continue;
+				if (x_proposal == entity.x && y_proposal == entity.y) reject = true;
+			}
+		}
+		if (reject && action.x != 0) dir *= -1;
+		x_cache = x;
+		y_cache = y;
+		if (!reject)
+		{
+			x = x_proposal;
+			y = y_proposal;
+		}
+		
 		action_index++;
 		action_index %= array_length(actions);
 	}
@@ -67,7 +106,6 @@ function spawn_glider(_x) { return new str_entity(_x, -1, spr_glider, create_act
 
 // Entities
 
-entities = ds_list_create();
-player = new str_entity(WIDTH / 2, HEIGHT / 2, spr_player, noone);
-ds_list_add(entities, player);
-ds_list_add(entities, spawn_glider(1));
+player = new str_entity(WIDTH / 2, HEIGHT / 2, spr_player);
+ds_list_add(global.entities, player);
+ds_list_add(global.entities, spawn_glider(1));

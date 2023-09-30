@@ -2,4 +2,4 @@
 
 // Lists
 
-ds_list_destroy(entities);
+if (ds_exists(global.entities, ds_type_list)) ds_list_destroy(global.entities);

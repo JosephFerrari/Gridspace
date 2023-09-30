@@ -9,16 +9,29 @@ var down = keyboard_check_pressed(vk_down);
 
 // Player
 
-if (left) player.move(-1, 0);
-if (right) player.move(1, 0);
-if (up) player.move(0, -1);
-if (down) player.move(0, 1);
-if (left || right || up || down)
+if (active_entity == noone)
 {
-	for (var i = 0; i < ds_list_size(entities); i++)
+	if (left) player.actions[0] = action_horizontal(-1);
+	if (right) player.actions[0] = action_horizontal(1);
+	if (up) player.actions[0] = action_vertical(-1);
+	if (down) player.actions[0] = action_vertical(1);
+	if (left || right || up || down) active_entity = player;
+}
+
+// Action
+
+if (active_entity != noone)
+{
+	if (transition <= 0)
 	{
-		var entity = entities[| i];
-		entity.act();
+		active_entity.act();
+		transition = 0;
+	}
+	transition += (delta_time / 1000000) * 10;
+	if (transition >= 1)
+	{
+		next_entity();
+		transition = 0;
 	}
 }
 
