@@ -27,17 +27,54 @@ array_push(global.entities, player);
 turn = 1;
 queue = [];
 queue_pos = 0;
-array_push(queue, new str_spawner(5, enemy.gunner, 0));
-/*array_push(queue, new str_spawner(15, enemy.glider, 2));
-array_push(queue, new str_spawner(15, enemy.glider, 0));
-array_push(queue, new str_spawner(15, enemy.glider, -2));
-array_push(queue, new str_spawner(30, enemy.glider, -3));
-array_push(queue, new str_spawner(31, enemy.glider, -2));
-array_push(queue, new str_spawner(32, enemy.glider, -1));
-array_push(queue, new str_spawner(33, enemy.glider, 0));
-array_push(queue, new str_spawner(34, enemy.glider, 1));
-array_push(queue, new str_spawner(35, enemy.glider, 2));
-array_push(queue, new str_spawner(36, enemy.glider, 3));*/
+var pos = 5;
+
+array_push(queue, new str_spawner(pos, enemy.missile, -2)); pos += 10;
+array_push(queue, new str_spawner(pos, enemy.missile, 2)); pos += 10;
+array_push(queue, new str_spawner(pos, enemy.gunner, 0)); pos += 15;
+array_push(queue, new str_spawner(pos, enemy.missile, -2)); pos += 0;
+array_push(queue, new str_spawner(pos, enemy.missile, 2)); pos += 15;
+array_push(queue, new str_spawner(pos, enemy.glider, -1)); pos += 20;
+array_push(queue, new str_spawner(pos, enemy.gunner, 2)); pos += 1;
+array_push(queue, new str_spawner(pos, enemy.gunner, 0)); pos += 1;
+array_push(queue, new str_spawner(pos, enemy.gunner, -2)); pos += 30;
+array_push(queue, new str_spawner(pos, enemy.glider, 2)); pos += 5;
+array_push(queue, new str_spawner(pos, enemy.glider, -2)); pos += 15;
+array_push(queue, new str_spawner(pos, enemy.missile, -2)); pos += 2;
+array_push(queue, new str_spawner(pos, enemy.missile, 0)); pos += 2;
+array_push(queue, new str_spawner(pos, enemy.missile, 2)); pos += 10;
+array_push(queue, new str_spawner(pos, enemy.saucer, 0)); pos += 20;
+
+array_push(queue, new str_spawner(pos, enemy.glider, -2)); pos += 5;
+array_push(queue, new str_spawner(pos, enemy.glider, 2)); pos += 15;
+array_push(queue, new str_spawner(pos, enemy.gunner, -3)); pos += 3;
+array_push(queue, new str_spawner(pos, enemy.gunner, -1)); pos += 3;
+array_push(queue, new str_spawner(pos, enemy.gunner, 1)); pos += 3;
+array_push(queue, new str_spawner(pos, enemy.gunner, 3)); pos += 20;
+array_push(queue, new str_spawner(pos, enemy.rammer, -2)); pos += 5;
+array_push(queue, new str_spawner(pos, enemy.rammer, 2)); pos += 15;
+array_push(queue, new str_spawner(pos, enemy.glider, -2)); pos += 5;
+array_push(queue, new str_spawner(pos, enemy.glider, 0)); pos += 5;
+array_push(queue, new str_spawner(pos, enemy.glider, 2)); pos += 15;
+array_push(queue, new str_spawner(pos, enemy.saucer, -2)); pos += 10;
+array_push(queue, new str_spawner(pos, enemy.saucer, 2)); pos += 25;
+
+array_push(queue, new str_spawner(pos, enemy.glider, 2)); pos += 5;
+array_push(queue, new str_spawner(pos, enemy.rammer, 0)); pos += 5;
+array_push(queue, new str_spawner(pos, enemy.glider, -2)); pos += 20;
+array_push(queue, new str_spawner(pos, enemy.gunner, 2)); pos += 0;
+array_push(queue, new str_spawner(pos, enemy.gunner, 0)); pos += 0;
+array_push(queue, new str_spawner(pos, enemy.gunner, -2)); pos += 5;
+array_push(queue, new str_spawner(pos, enemy.missile, -3)); pos += 0;
+array_push(queue, new str_spawner(pos, enemy.missile, -1)); pos += 0;
+array_push(queue, new str_spawner(pos, enemy.missile, 1)); pos += 0;
+array_push(queue, new str_spawner(pos, enemy.missile, 3)); pos += 20;
+array_push(queue, new str_spawner(pos, enemy.glider, -2)); pos += 1;
+array_push(queue, new str_spawner(pos, enemy.glider, 0)); pos += 1;
+array_push(queue, new str_spawner(pos, enemy.glider, 2)); pos += 10;
+array_push(queue, new str_spawner(pos, enemy.saucer, 0)); pos += 25;
+
+array_push(queue, new str_spawner(pos, enemy.mothership, 0));
 
 // Visual
 
