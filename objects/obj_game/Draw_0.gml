@@ -9,7 +9,7 @@ var delta = delta_time / 1000000;
 for (var i = 0; i < array_length(global.entities); i++)
 {
 	var entity = global.entities[i];
-	if (!entity.solid) continue;
+	if (!entity.solid || entity.crashed) continue;
 	var xpos = entity.x;
 	var ypos = entity.y;
 	if (entity.action_rejected)
@@ -70,7 +70,7 @@ for (var i = 0; i < array_length(global.entities); i++)
 		xpos = lerp(entity.x_cache, entity.x, smooth(transition));
 		ypos = lerp(entity.y_cache, entity.y, smooth(transition));
 	}
-	if (transition < 0.5 || entity.hits > 0 || !entity.passed) draw_sprite(entity.spr, 0, (xpos + 0.5) * TILE, (ypos + 0.5) * TILE);
+	if (transition < 0.5 || entity.hits > 0 || !entity.passed) draw_sprite_ext(entity.spr, 0, (xpos + 0.5) * TILE, (ypos + 0.5) * TILE, 1, 1, 0, entity.crashed ? c_dkgrey : c_white, 1);
 }
 
 // Effects

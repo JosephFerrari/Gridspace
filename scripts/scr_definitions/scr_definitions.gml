@@ -52,6 +52,8 @@ function str_entity(_spr, _x = WIDTH / 2, _y = -1, _actions = noone, _parent = n
 	action_rejected = false;
 	projectile_offset = 0;
 	
+	crashed = false;
+	
 	parent = _parent;
 	
 	x_proposal = x;
@@ -116,7 +118,12 @@ function str_entity(_spr, _x = WIDTH / 2, _y = -1, _actions = noone, _parent = n
 		
 		if (solid && !action_rejected && !action_complete)
 		{
-			if (x_proposal < 0 || x_proposal + w > WIDTH || y_proposal < 0 || y_proposal + h > HEIGHT) action_rejected = true;
+			if (x_proposal < 0 || x_proposal + w > WIDTH || y_proposal < 0) action_rejected = true;
+			else if (y_proposal + h > HEIGHT)
+			{
+				action_rejected = true;
+				if (solid && evil) crashed = true;
+			}
 			else
 			{
 				for (var i = 0; i < array_length(global.entities); i++)
@@ -125,7 +132,11 @@ function str_entity(_spr, _x = WIDTH / 2, _y = -1, _actions = noone, _parent = n
 					if (entity == self || !entity.solid) continue;
 					if (entity.action_complete)
 					{
-						if (x_proposal < entity.x + entity.w && x_proposal + w > entity.x && y_proposal < entity.y + entity.h && y_proposal + h > entity.y) action_rejected = true;
+						if (x_proposal < entity.x + entity.w && x_proposal + w > entity.x && y_proposal < entity.y + entity.h && y_proposal + h > entity.y)
+						{
+							action_rejected = true;
+							if (solid && evil && entity.crashed) crashed = true;
+						}
 					}
 					else
 					{
@@ -230,7 +241,19 @@ function str_entity(_spr, _x = WIDTH / 2, _y = -1, _actions = noone, _parent = n
 		}
 		if (next_action == action.shoot_down || next_action == action.laser_down) projectile_offset = (projectile_offset + 1) % w;
 		
-		action_index = (action_index + 1) % array_length(actions);
+		if (crashed)
+		{
+			while (array_length(actions) > 0)
+			{
+				var effect = actions[0];
+				array_delete(actions, 0, 1);
+				delete effect;
+			}
+			actions = noone;
+			x_proposal_cache = x;
+			y_proposal_cache = y;
+		}
+		else action_index = (action_index + 1) % array_length(actions);
 	}
 }
 
