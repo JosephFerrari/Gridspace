@@ -43,11 +43,13 @@ if (transition >= 1)
 	{
 		if (energy >= WEAK) player.actions[0] = action.shoot_up;
 		else shoot = false;
+		//if (shoot) audio_play_sound(snd_shoot, 10, false);
 	}
 	if (laser)
 	{
 		if (energy >= STRONG) player.actions[0] = action.laser_up;
 		else laser = false;
+		//if (laser) audio_play_sound(snd_laser, 10, false);
 	}
 	if (left || right || up || down || shoot || laser)
 	{
@@ -92,6 +94,8 @@ else
 			if (entity.hits <= 0 || entity.x < 0 || entity.x + entity.w > WIDTH || entity.y + entity.h <= 0 || entity.y + entity.h > HEIGHT)
 			{
 				if (entity.spr == spr_mothership) winner = true;
+				if (entity.spr == spr_player) audio_play_sound(snd_game_over, 10, false);
+				if (entity.solid && entity.evil) audio_play_sound(snd_destroy, 10, false);
 				array_delete(global.entities, i, 1);
 				array_foreach(entity.actions, function(_action) { delete _action; });
 				delete entity;

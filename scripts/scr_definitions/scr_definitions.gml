@@ -70,9 +70,21 @@ function str_entity(_spr, _x = WIDTH / 2, _y = -1, _actions = noone, _parent = n
 		
 		action_rejected = false;
 		action_complete = true;
-		if (next_action == action.shoot_up) array_push(global.entities, new str_entity(spr_bullet_up, x + projectile_offset, y + h - 1, array_from(action.move_up), self));
-		else if (next_action == action.shoot_down) array_push(global.entities, new str_entity(spr_bullet_down, x + projectile_offset, y + h - 1, array_from(action.move_down), self));
-		else if (next_action == action.charge) array_push(global.effects, new str_effect(spr_charge, x + projectile_offset, y + h - 1, 0, true));
+		if (next_action == action.shoot_up)
+		{
+			array_push(global.entities, new str_entity(spr_bullet_up, x + projectile_offset, y + h - 1, array_from(action.move_up), self));
+			audio_play_sound(snd_shoot, 10, false);
+		}
+		else if (next_action == action.shoot_down)
+		{
+			array_push(global.entities, new str_entity(spr_bullet_down, x + projectile_offset, y + h - 1, array_from(action.move_down), self));
+			audio_play_sound(snd_shoot, 10, false);
+		}
+		else if (next_action == action.charge)
+		{
+			array_push(global.effects, new str_effect(spr_charge, x + projectile_offset, y + h - 1, 0, true));
+			audio_play_sound(snd_charge, 10, false);
+		}
 		else action_complete = false;
 	}
 	
@@ -176,6 +188,7 @@ function str_entity(_spr, _x = WIDTH / 2, _y = -1, _actions = noone, _parent = n
 						entity.hits--;
 						if (entity.hits <= 0) array_push(global.effects, new str_effect(entity.solid ? spr_spark : spr_poof, x_proposal, y_proposal, 1));
 						else array_push(global.effects, new str_effect(spr_poof, x_proposal, y_proposal, 1));
+						audio_play_sound(snd_poof, 10, false);
 					}
 				}
 				if (x_proposal < entity.x + entity.w && x_proposal + w > entity.x && y_proposal < entity.y + entity.h && y_proposal + h > entity.y && x < entity.x_proposal + entity.w && x + w > entity.x_proposal && y < entity.y_proposal + entity.h && y + h > entity.y_proposal)
@@ -188,6 +201,7 @@ function str_entity(_spr, _x = WIDTH / 2, _y = -1, _actions = noone, _parent = n
 						entity.passed = true;
 						if (entity.hits <= 0) array_push(global.effects, new str_effect(entity.solid ? spr_spark : spr_poof, x, (y + entity.y) / 2, 0.5));
 						else array_push(global.effects, new str_effect(spr_poof, x, (y + entity.y) / 2, 0.5));
+						audio_play_sound(snd_poof, 10, false);
 					}
 				}
 			}
@@ -217,6 +231,7 @@ function str_entity(_spr, _x = WIDTH / 2, _y = -1, _actions = noone, _parent = n
 		
 		if (next_action == action.laser_up || next_action == action.laser_down)
 		{
+			audio_play_sound(snd_laser, 10, false);
 			var offset = h - 1;
 			var finished = false;
 			while (!finished)
