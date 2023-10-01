@@ -15,6 +15,7 @@ var right = keyboard_check_pressed(vk_right);
 var up = keyboard_check_pressed(vk_up);
 var down = keyboard_check_pressed(vk_down);
 var shoot = keyboard_check_pressed(ord("Z"));
+var laser = keyboard_check_pressed(ord("X"));
 
 // Interface
 
@@ -43,10 +44,17 @@ if (transition >= 1)
 		if (energy >= WEAK) player.actions[0] = action.shoot_up;
 		else shoot = false;
 	}
-	if (left || right || up || down || shoot)
+	if (laser)
+	{
+		if (energy >= STRONG) player.actions[0] = action.laser_up;
+		else laser = false;
+	}
+	if (left || right || up || down || shoot || laser)
 	{
 		if (shoot) energy -= WEAK;
+		else if (laser) energy -= STRONG;
 		else if (energy < ENERGY) energy++;
+		global.effects = array_filter(global.effects, function(_element) { return !_element.persist; });
 		while (queue_pos < array_length(queue) && queue[queue_pos].turn == turn)
 		{
 			queue[queue_pos].spawn();

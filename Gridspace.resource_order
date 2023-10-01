@@ -26,7 +26,9 @@
     {"name":"spr_bullet_up","order":4,"path":"sprites/spr_bullet_up/spr_bullet_up.yy",},
     {"name":"spr_glider","order":2,"path":"sprites/spr_glider/spr_glider.yy",},
     {"name":"spr_jet_up","order":6,"path":"sprites/spr_jet_up/spr_jet_up.yy",},
+    {"name":"spr_charge","order":11,"path":"sprites/spr_charge/spr_charge.yy",},
     {"name":"spr_window","order":7,"path":"sprites/spr_window/spr_window.yy",},
+    {"name":"spr_laser","order":12,"path":"sprites/spr_laser/spr_laser.yy",},
     {"name":"spr_player","order":1,"path":"sprites/spr_player/spr_player.yy",},
   ],
 }

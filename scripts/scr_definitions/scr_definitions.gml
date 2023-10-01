@@ -1,5 +1,18 @@
 /// @description Definitions
 
+// Effects
+
+function str_effect(_spr, _x, _y, _delay = 0, _persist = false) constructor
+{
+	spr = _spr;
+    x = _x;
+    y = _y;
+	delay = _delay;
+	persist = _persist;
+	
+	frame = 0;
+}
+
 // Actions
 
 enum action
@@ -10,7 +23,10 @@ enum action
 	move_down,
 	move_along,
 	shoot_up,
-	shoot_down
+	shoot_down,
+	charge,
+	laser_up,
+	laser_down
 }
 
 // Entities
@@ -52,7 +68,8 @@ function str_entity(_spr, _x = WIDTH / 2, _y = -1, _actions = noone, _parent = n
 		action_rejected = false;
 		action_complete = true;
 		if (next_action == action.shoot_up) array_push(global.entities, new str_entity(spr_bullet_up, x, y, array_from(action.move_up), self));
-		if (next_action == action.shoot_down) array_push(global.entities, new str_entity(spr_bullet_down, x, y, array_from(action.move_down), self));
+		else if (next_action == action.shoot_down) array_push(global.entities, new str_entity(spr_bullet_down, x, y, array_from(action.move_down), self));
+		else if (next_action == action.charge) array_push(global.effects, new str_effect(spr_charge, x, y, 0, true));
 		else action_complete = false;
 	}
 	
@@ -142,7 +159,11 @@ function str_entity(_spr, _x = WIDTH / 2, _y = -1, _actions = noone, _parent = n
 				if (x_proposal < entity.x_proposal + entity.w && x_proposal + w > entity.x_proposal && y_proposal < entity.y_proposal + entity.h && y_proposal + h > entity.y_proposal)
 				{
 					hits--;
-					if (evil != entity.evil) entity.hits--;
+					if (evil != entity.evil)
+					{
+						entity.hits--;
+						if (entity.hits <= 0) array_push(global.effects, new str_effect(spr_charge, entity.x_proposal, entity.y_proposal, 1));
+					}
 				}
 				if (x_proposal < entity.x + entity.w && x_proposal + w > entity.x && y_proposal < entity.y + entity.h && y_proposal + h > entity.y && x < entity.x_proposal + entity.w && x + w > entity.x_proposal && y < entity.y_proposal + entity.h && y + h > entity.y_proposal)
 				{
@@ -152,6 +173,7 @@ function str_entity(_spr, _x = WIDTH / 2, _y = -1, _actions = noone, _parent = n
 					{
 						entity.hits--;
 						entity.passed = true;
+						if (entity.hits <= 0) array_push(global.effects, new str_effect(spr_charge, (x + entity.x) / 2, (y + entity.y) / 2, 0.5));
 					}
 				}
 			}
@@ -177,6 +199,31 @@ function str_entity(_spr, _x = WIDTH / 2, _y = -1, _actions = noone, _parent = n
 	static wrap_up = function()
 	{
 		if (actions == noone) return;
+		var next_action = actions[action_index];
+		
+		var 
+		if (next_action == action.laser_up || next_action == action.laser_down)
+		{
+			var offset = 0;
+			var finished = false;
+			while (!finished)
+			{
+				offset += next_action == action.laser_up ? -1 : 1;
+				for (var i = 0; i < array_length(global.entities); i++)
+				{
+					var entity = global.entities[i];
+					if (entity == self || entity.hits <= 0 || entity.evil == evil) continue;
+					if (entity.x == x && entity.y == y + offset)
+					{
+						entity.hits--;
+						if (entity.hits <= 0) array_push(global.effects, new str_effect(spr_charge, entity.x, entity.y, 1));
+						if (entity.solid) finished = true;
+					}
+				}
+				array_push(global.effects, new str_effect(spr_laser, x, y + offset));
+				if (y + offset <= 0 || y + offset >= HEIGHT - 1) finished = true;
+			}
+		}
 		
 		action_index = (action_index + 1) % array_length(actions);
 	}

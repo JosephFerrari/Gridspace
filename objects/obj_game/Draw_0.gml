@@ -1,5 +1,9 @@
 /// @description Draw Components
 
+// Timing
+
+var delta = delta_time / 1000000;
+
 // Jets
 
 for (var i = 0; i < array_length(global.entities); i++)
@@ -61,4 +65,24 @@ for (var i = 0; i < array_length(global.entities); i++)
 		ypos = lerp(entity.y_cache, entity.y, smooth(transition));
 	}
 	if (transition < 0.5 || entity.hits > 0 || !entity.passed) draw_sprite(entity.spr, 0, (xpos + 0.5) * TILE, (ypos + 0.5) * TILE);
+}
+
+// Effects
+
+for (var i = 0; i < array_length(global.effects); i++)
+{
+	var effect = global.effects[i];
+	if (effect.persist) draw_sprite(effect.spr, frame % sprite_get_number(effect.spr), (effect.x + 0.5) * TILE, (effect.y + 0.5) * TILE);
+	else if (effect.delay > 0) effect.delay -= delta * 5;
+	else
+	{
+		effect.frame += delta * 5;
+		draw_sprite(effect.spr, effect.frame % sprite_get_number(effect.spr), (effect.x + 0.5) * TILE, (effect.y + 0.5) * TILE);
+		if (effect.frame >= 1)
+		{
+			array_delete(global.effects, i, 1);
+			delete effect;
+			i--;
+		}
+	}
 }
