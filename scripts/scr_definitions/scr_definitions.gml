@@ -262,6 +262,8 @@ function str_entity(_spr, _x = WIDTH / 2, _y = -1, _actions = noone, _parent = n
 enum enemy
 {
 	missile,
+	gunner,
+	rammer,
 	glider,
 	saucer,
 	mothership
@@ -282,6 +284,12 @@ function str_spawner(_turn, _type, _offset = WIDTH / 2, _range = _offset) constr
 		{
 			case enemy.missile:
 				entity = new str_entity(spr_glider, pos, -1, array_from(action.move_down));
+				break;
+			case enemy.gunner:
+				entity = new str_entity(spr_glider, pos, -1, array_from(action.move_down, action.shoot_down, action.move_down, action.move_up));
+				break;
+			case enemy.rammer:
+				entity = new str_entity(spr_glider, pos, -1, array_from(action.move_down, action.charge, action.laser_down));
 				break;
 			case enemy.glider:
 				entity = new str_entity(spr_glider, pos, -1, array_from(action.move_down, action.shoot_down, action.move_along));
