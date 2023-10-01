@@ -89,8 +89,9 @@ else
 		for (var i = 0; i < array_length(global.entities); i++)
 		{
 			var entity = global.entities[i];
-			if (entity.hits <= 0 || entity.x < 0 || entity.x + entity.w > WIDTH || entity.y < 0 || entity.y + entity.h > HEIGHT)
+			if (entity.hits <= 0 || entity.x < 0 || entity.x + entity.w > WIDTH || entity.y + entity.h <= 0 || entity.y + entity.h > HEIGHT)
 			{
+				if (entity.spr == spr_mothership) winner = true;
 				array_delete(global.entities, i, 1);
 				array_foreach(entity.actions, function(_action) { delete _action; });
 				delete entity;

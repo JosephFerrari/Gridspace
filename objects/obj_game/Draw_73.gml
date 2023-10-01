@@ -40,3 +40,7 @@ if (!intro && window_transition >= 1)
 	draw_sprite(spr_button, energy >= STRONG ? 0 : 1, (WIDTH + 2) * TILE, (ENERGY + 1 - STRONG) * TILE);
 	draw_sprite(spr_button, energy >= WEAK ? 2 : 3, (WIDTH + 2) * TILE, (ENERGY + 1 - WEAK) * TILE);
 }
+
+// Winner
+
+if (winner) draw_sprite(spr_you_win, 0, (WIDTH / 2) * TILE, (HEIGHT / 2) * TILE);

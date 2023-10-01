@@ -70,9 +70,9 @@ function str_entity(_spr, _x = WIDTH / 2, _y = -1, _actions = noone, _parent = n
 		
 		action_rejected = false;
 		action_complete = true;
-		if (next_action == action.shoot_up) array_push(global.entities, new str_entity(spr_bullet_up, x + projectile_offset, y, array_from(action.move_up), self));
-		else if (next_action == action.shoot_down) array_push(global.entities, new str_entity(spr_bullet_down, x + projectile_offset, y, array_from(action.move_down), self));
-		else if (next_action == action.charge) array_push(global.effects, new str_effect(spr_charge, x + projectile_offset, y, 0, true));
+		if (next_action == action.shoot_up) array_push(global.entities, new str_entity(spr_bullet_up, x + projectile_offset, y + h - 1, array_from(action.move_up), self));
+		else if (next_action == action.shoot_down) array_push(global.entities, new str_entity(spr_bullet_down, x + projectile_offset, y + h - 1, array_from(action.move_down), self));
+		else if (next_action == action.charge) array_push(global.effects, new str_effect(spr_charge, x + projectile_offset, y + h - 1, 0, true));
 		else action_complete = false;
 	}
 	
@@ -118,11 +118,11 @@ function str_entity(_spr, _x = WIDTH / 2, _y = -1, _actions = noone, _parent = n
 		
 		if (solid && !action_rejected && !action_complete)
 		{
-			if (x_proposal < 0 || x_proposal + w > WIDTH || y_proposal < 0) action_rejected = true;
+			if (x_proposal < 0 || x_proposal + w > WIDTH || y_proposal + h <= 0) action_rejected = true;
 			else if (y_proposal + h > HEIGHT)
 			{
 				action_rejected = true;
-				if (solid && evil) crashed = true;
+				if (solid && evil && spr != spr_mothership) crashed = true;
 			}
 			else
 			{
@@ -135,7 +135,7 @@ function str_entity(_spr, _x = WIDTH / 2, _y = -1, _actions = noone, _parent = n
 						if (x_proposal < entity.x + entity.w && x_proposal + w > entity.x && y_proposal < entity.y + entity.h && y_proposal + h > entity.y)
 						{
 							action_rejected = true;
-							if (solid && evil && entity.crashed) crashed = true;
+							if (solid && evil && entity.crashed && spr != spr_mothership) crashed = true;
 						}
 					}
 					else
@@ -217,7 +217,7 @@ function str_entity(_spr, _x = WIDTH / 2, _y = -1, _actions = noone, _parent = n
 		
 		if (next_action == action.laser_up || next_action == action.laser_down)
 		{
-			var offset = 0;
+			var offset = h - 1;
 			var finished = false;
 			while (!finished)
 			{
@@ -226,7 +226,7 @@ function str_entity(_spr, _x = WIDTH / 2, _y = -1, _actions = noone, _parent = n
 				{
 					var entity = global.entities[i];
 					if (entity == self || entity.hits <= 0 || entity.evil == evil) continue;
-					if (x + projectile_offset >= entity.x && x + projectile_offset < entity.x + entity.w && entity.y == y + offset)
+					if (x + projectile_offset >= entity.x && x + projectile_offset < entity.x + entity.w && entity.y + entity.w - 1 == y + offset)
 					{
 						entity.hits--;
 						if (entity.hits <= 0) array_push(global.effects, new str_effect(entity.solid ? spr_spark : spr_poof, x + projectile_offset, entity.y, 1));
@@ -288,6 +288,9 @@ function str_spawner(_turn, _type, _offset = WIDTH / 2, _range = _offset) constr
 				break;
 			case enemy.saucer:
 				entity = new str_entity(spr_saucer, pos, -1, array_from(action.move_down, action.shoot_down, action.move_down, action.charge, action.laser_down, action.move_down, action.shoot_down));
+				break;
+			case enemy.mothership:
+				entity = new str_entity(spr_mothership, pos, -1, array_from(action.move_down, action.move_down, action.shoot_down, action.shoot_down, action.shoot_down, action.shoot_down, action.shoot_down, action.shoot_down, action.shoot_down, action.move_down, action.charge, action.laser_down, action.charge, action.laser_down, action.charge, action.laser_down, action.charge, action.laser_down, action.charge, action.laser_down, action.charge, action.laser_down, action.charge, action.laser_down));
 				break;
 			default:
 				break;

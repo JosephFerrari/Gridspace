@@ -27,7 +27,7 @@ array_push(global.entities, player);
 turn = 1;
 queue = [];
 queue_pos = 0;
-array_push(queue, new str_spawner(5, enemy.saucer, 0));
+array_push(queue, new str_spawner(5, enemy.mothership, 0));
 /*array_push(queue, new str_spawner(15, enemy.glider, 2));
 array_push(queue, new str_spawner(15, enemy.glider, 0));
 array_push(queue, new str_spawner(15, enemy.glider, -2));
@@ -48,3 +48,4 @@ frame = 0;
 
 intro = false; // true
 window_transition = 1; // 0
+winner = false;
