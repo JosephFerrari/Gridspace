@@ -50,6 +50,7 @@ function str_entity(_spr, _x = WIDTH / 2, _y = -1, _actions = noone, _parent = n
 	action_index = 0;
 	action_complete = false;
 	action_rejected = false;
+	projectile_offset = 0;
 	
 	parent = _parent;
 	
@@ -67,9 +68,9 @@ function str_entity(_spr, _x = WIDTH / 2, _y = -1, _actions = noone, _parent = n
 		
 		action_rejected = false;
 		action_complete = true;
-		if (next_action == action.shoot_up) array_push(global.entities, new str_entity(spr_bullet_up, x, y, array_from(action.move_up), self));
-		else if (next_action == action.shoot_down) array_push(global.entities, new str_entity(spr_bullet_down, x, y, array_from(action.move_down), self));
-		else if (next_action == action.charge) array_push(global.effects, new str_effect(spr_charge, x, y, 0, true));
+		if (next_action == action.shoot_up) array_push(global.entities, new str_entity(spr_bullet_up, x + projectile_offset, y, array_from(action.move_up), self));
+		else if (next_action == action.shoot_down) array_push(global.entities, new str_entity(spr_bullet_down, x + projectile_offset, y, array_from(action.move_down), self));
+		else if (next_action == action.charge) array_push(global.effects, new str_effect(spr_charge, x + projectile_offset, y, 0, true));
 		else action_complete = false;
 	}
 	
@@ -203,7 +204,6 @@ function str_entity(_spr, _x = WIDTH / 2, _y = -1, _actions = noone, _parent = n
 		if (actions == noone) return;
 		var next_action = actions[action_index];
 		
-		var 
 		if (next_action == action.laser_up || next_action == action.laser_down)
 		{
 			var offset = 0;
@@ -215,7 +215,7 @@ function str_entity(_spr, _x = WIDTH / 2, _y = -1, _actions = noone, _parent = n
 				{
 					var entity = global.entities[i];
 					if (entity == self || entity.hits <= 0 || entity.evil == evil) continue;
-					if (entity.x == x && entity.y == y + offset)
+					if (entity.x == x + projectile_offset && entity.y == y + offset)
 					{
 						entity.hits--;
 						if (entity.hits <= 0) array_push(global.effects, new str_effect(entity.solid ? spr_spark : spr_poof, entity.x, entity.y, 1));
@@ -223,11 +223,12 @@ function str_entity(_spr, _x = WIDTH / 2, _y = -1, _actions = noone, _parent = n
 						//if (entity.solid) finished = true;
 					}
 				}
-				if (abs(offset) > 1) array_push(global.effects, new str_effect(action.laser_up ? spr_laser_up : spr_laser_down, x, y + offset));
-				else array_push(global.effects, new str_effect(action.laser_up ? spr_laser_start_up : spr_laser_start_down, x, y + offset));
+				if (abs(offset) > 1) array_push(global.effects, new str_effect(next_action == action.laser_up ? spr_laser_up : spr_laser_down, x + projectile_offset, y + offset));
+				else array_push(global.effects, new str_effect(next_action == action.laser_up ? spr_laser_start_up : spr_laser_start_down, x + projectile_offset, y + offset));
 				if (y + offset <= 0 || y + offset >= HEIGHT - 1) finished = true;
 			}
 		}
+		if (next_action == action.shoot_down || next_action == action.laser_down) projectile_offset = (projectile_offset + 1) % w;
 		
 		action_index = (action_index + 1) % array_length(actions);
 	}
@@ -237,7 +238,10 @@ function str_entity(_spr, _x = WIDTH / 2, _y = -1, _actions = noone, _parent = n
 
 enum enemy
 {
-	glider
+	missile,
+	glider,
+	saucer,
+	mothership
 }
 
 function str_spawner(_turn, _type, _offset = WIDTH / 2, _range = _offset) constructor
@@ -253,8 +257,14 @@ function str_spawner(_turn, _type, _offset = WIDTH / 2, _range = _offset) constr
 		var entity = noone;
 		switch (type)
 		{
+			case enemy.missile:
+				entity = new str_entity(spr_glider, pos, -1, array_from(action.move_down));
+				break;
 			case enemy.glider:
 				entity = new str_entity(spr_glider, pos, -1, array_from(action.move_down, action.shoot_down, action.move_along));
+				break;
+			case enemy.saucer:
+				entity = new str_entity(spr_saucer, pos, -1, array_from(action.move_down, action.shoot_down, action.move_down, action.charge, action.laser_down, action.move_down, action.shoot_down));
 				break;
 			default:
 				break;
