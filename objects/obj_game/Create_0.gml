@@ -6,11 +6,19 @@
 #macro WIDTH 7
 #macro HEIGHT 11
 
+#macro ENERGY 5
+#macro STRONG 4
+#macro WEAK 2
+#macro HITS 3
+
 // Entity Pool
 
 global.entities = array_create(0);
 transition = 1;
 
+// Player
+
+energy = ENERGY;
 player = new str_entity(spr_player, WIDTH / 2, HEIGHT / 2);
 array_push(global.entities, player);
 
@@ -33,3 +41,8 @@ array_push(queue, new str_spawner(36, enemy.glider, 3));
 
 // Visual
 frame = 0;
+
+// Interface
+
+intro = false; // true
+window_transition = 1; // 0

@@ -18,7 +18,7 @@ for (var i = 0; i < array_length(global.entities); i++)
 		xpos = lerp(entity.x_cache, entity.x, smooth(transition));
 		ypos = lerp(entity.y_cache, entity.y, smooth(transition));
 	}
-	if (transition < 0.5 || entity.hits > 0 || !entity.passed) draw_sprite_ext(spr_jet, frame % sprite_get_number(spr_jet), (xpos + 0.5) * TILE, (ypos + 0.5) * TILE, 1, entity.evil ? -1 : 1, 0, c_white, 0.5);
+	if (transition < 0.5 || entity.hits > 0 || !entity.passed) draw_sprite_ext(entity.evil ? spr_jet_down : spr_jet_up, frame % sprite_get_number(spr_jet_down), (xpos + 0.5) * TILE, (ypos + 0.5) * TILE, 1, 1, 0, c_white, 0.5);
 }
 
 // Non-solid Entities

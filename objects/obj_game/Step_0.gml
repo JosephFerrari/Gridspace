@@ -1,24 +1,52 @@
 /// @description Game Logic
 
+// Debug
+
+if (keyboard_check_pressed(vk_escape)) game_end();
+
+// Timing
+
+var delta = delta_time / 1000000;
+
 // Controls
 
 var left = keyboard_check_pressed(vk_left);
 var right = keyboard_check_pressed(vk_right);
 var up = keyboard_check_pressed(vk_up);
 var down = keyboard_check_pressed(vk_down);
-var shoot = keyboard_check_pressed(vk_space);
+var shoot = keyboard_check_pressed(ord("Z"));
+
+// Interface
+
+if (intro)
+{
+	if (shoot) intro = false;
+	return;
+}
+if (window_transition < 1) window_transition += delta * 5;
+else if (window_transition > 1) window_transition = 1;
+
+// Visual
+frame += delta * 20;
 
 // Action
 
 if (transition >= 1)
 {
+	if (player.hits <= 0) return;
 	if (left) player.actions[0] = action.move_left;
 	if (right) player.actions[0] = action.move_right;
 	if (up) player.actions[0] = action.move_up;
 	if (down) player.actions[0] = action.move_down;
-	if (shoot) player.actions[0] = action.shoot_up;
+	if (shoot)
+	{
+		if (energy >= WEAK) player.actions[0] = action.shoot_up;
+		else shoot = false;
+	}
 	if (left || right || up || down || shoot)
 	{
+		if (shoot) energy -= WEAK;
+		else if (energy < ENERGY) energy++;
 		while (queue_pos < array_length(queue) && queue[queue_pos].turn == turn)
 		{
 			queue[queue_pos].spawn();
@@ -38,7 +66,7 @@ if (transition >= 1)
 }
 else
 {
-	transition += (delta_time / 1000000) * 10;
+	transition += delta * 5;
 	if (transition >= 1)
 	{
 		for (var i = 0; i < array_length(global.entities); i++)
@@ -56,10 +84,3 @@ else
 		turn++;
 	}
 }
-
-// Visual
-frame += (delta_time / 1000000) * 20;
-
-// Debug
-
-if (keyboard_check_pressed(vk_escape)) game_end();

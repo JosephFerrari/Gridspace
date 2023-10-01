@@ -27,7 +27,7 @@ function str_entity(_spr, _x = WIDTH / 2, _y = -1, _actions = noone, _parent = n
 	solid = spr != spr_bullet_up && spr != spr_bullet_down;
 	evil = spr != spr_player && spr != spr_bullet_up;
 	
-	hits = spr == spr_player ? 3 : w * h;
+	hits = spr == spr_player ? HITS : w * h;
 	passed = false;
 	
 	actions = _actions;
