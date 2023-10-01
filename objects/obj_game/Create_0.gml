@@ -30,3 +30,6 @@ array_push(queue, new str_spawner(33, enemy.glider, 0));
 array_push(queue, new str_spawner(34, enemy.glider, 1));
 array_push(queue, new str_spawner(35, enemy.glider, 2));
 array_push(queue, new str_spawner(36, enemy.glider, 3));
+
+// Visual
+frame = 0;

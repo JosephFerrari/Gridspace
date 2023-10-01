@@ -57,6 +57,9 @@ else
 	}
 }
 
+// Visual
+frame += (delta_time / 1000000) * 20;
+
 // Debug
 
 if (keyboard_check_pressed(vk_escape)) game_end();

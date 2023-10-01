@@ -22,6 +22,7 @@
     {"name":"spr_bullet_down","order":5,"path":"sprites/spr_bullet_down/spr_bullet_down.yy",},
     {"name":"spr_bullet_up","order":4,"path":"sprites/spr_bullet_up/spr_bullet_up.yy",},
     {"name":"spr_glider","order":2,"path":"sprites/spr_glider/spr_glider.yy",},
+    {"name":"spr_jet","order":6,"path":"sprites/spr_jet/spr_jet.yy",},
     {"name":"spr_player","order":1,"path":"sprites/spr_player/spr_player.yy",},
   ],
 }

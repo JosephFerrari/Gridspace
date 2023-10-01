@@ -41,6 +41,7 @@
     {"id":{"name":"spr_bullet_down","path":"sprites/spr_bullet_down/spr_bullet_down.yy",},},
     {"id":{"name":"spr_bullet_up","path":"sprites/spr_bullet_up/spr_bullet_up.yy",},},
     {"id":{"name":"spr_glider","path":"sprites/spr_glider/spr_glider.yy",},},
+    {"id":{"name":"spr_jet","path":"sprites/spr_jet/spr_jet.yy",},},
     {"id":{"name":"spr_grid","path":"sprites/spr_grid/spr_grid.yy",},},
     {"id":{"name":"spr_player","path":"sprites/spr_player/spr_player.yy",},},
     {"id":{"name":"rm_game","path":"rooms/rm_game/rm_game.yy",},},
