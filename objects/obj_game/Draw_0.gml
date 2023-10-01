@@ -43,7 +43,7 @@ for (var i = 0; i < array_length(global.entities); i++)
 		xpos = lerp(entity.x_cache, entity.x, smooth(transition));
 		ypos = lerp(entity.y_cache, entity.y, smooth(transition));
 	}
-	if (transition < 0.5 || entity.hits > 0 || !entity.passed) draw_sprite(entity.spr, 0, (xpos + 0.5) * TILE, (ypos + 0.5) * TILE);
+	if (transition < 0.5 || entity.hits > 0 || !entity.passed) draw_sprite(entity.spr, (frame / 2) % sprite_get_number(entity.spr), (xpos + 0.5) * TILE, (ypos + 0.5) * TILE);
 }
 
 // Solid Entities
