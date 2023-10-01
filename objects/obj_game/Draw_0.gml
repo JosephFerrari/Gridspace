@@ -76,13 +76,13 @@ for (var i = 0; i < array_length(global.effects); i++)
 	else if (effect.delay > 0) effect.delay -= delta * 5;
 	else
 	{
-		effect.frame += delta * 5;
-		draw_sprite(effect.spr, effect.frame % sprite_get_number(effect.spr), (effect.x + 0.5) * TILE, (effect.y + 0.5) * TILE);
-		if (effect.frame >= 1)
+		effect.f += delta * 5;
+		if (effect.f >= 1)
 		{
 			array_delete(global.effects, i, 1);
 			delete effect;
 			i--;
 		}
+		else draw_sprite(effect.spr, effect.f * sprite_get_number(effect.spr), (effect.x + 0.5) * TILE, (effect.y + 0.5) * TILE);
 	}
 }

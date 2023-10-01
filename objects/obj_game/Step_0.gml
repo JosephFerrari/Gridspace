@@ -54,7 +54,16 @@ if (transition >= 1)
 		if (shoot) energy -= WEAK;
 		else if (laser) energy -= STRONG;
 		else if (energy < ENERGY) energy++;
-		global.effects = array_filter(global.effects, function(_element) { return !_element.persist; });
+		for (var i = 0; i < array_length(global.effects); i++)
+		{
+			var effect = global.effects[i];
+			if (effect.persist)
+			{
+				array_delete(global.effects, i, 1);
+				delete effect;
+				i--;
+			}
+		}
 		while (queue_pos < array_length(queue) && queue[queue_pos].turn == turn)
 		{
 			queue[queue_pos].spawn();

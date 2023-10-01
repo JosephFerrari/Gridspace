@@ -10,7 +10,7 @@ function str_effect(_spr, _x, _y, _delay = 0, _persist = false) constructor
 	delay = _delay;
 	persist = _persist;
 	
-	frame = 0;
+	f = 0;
 }
 
 // Actions
@@ -162,7 +162,8 @@ function str_entity(_spr, _x = WIDTH / 2, _y = -1, _actions = noone, _parent = n
 					if (evil != entity.evil)
 					{
 						entity.hits--;
-						if (entity.hits <= 0) array_push(global.effects, new str_effect(spr_charge, entity.x_proposal, entity.y_proposal, 1));
+						if (entity.hits <= 0) array_push(global.effects, new str_effect(entity.solid ? spr_spark : spr_poof, entity.x_proposal, entity.y_proposal, 1));
+						else array_push(global.effects, new str_effect(spr_poof, entity.x_proposal, entity.y_proposal, 1));
 					}
 				}
 				if (x_proposal < entity.x + entity.w && x_proposal + w > entity.x && y_proposal < entity.y + entity.h && y_proposal + h > entity.y && x < entity.x_proposal + entity.w && x + w > entity.x_proposal && y < entity.y_proposal + entity.h && y + h > entity.y_proposal)
@@ -173,7 +174,8 @@ function str_entity(_spr, _x = WIDTH / 2, _y = -1, _actions = noone, _parent = n
 					{
 						entity.hits--;
 						entity.passed = true;
-						if (entity.hits <= 0) array_push(global.effects, new str_effect(spr_charge, (x + entity.x) / 2, (y + entity.y) / 2, 0.5));
+						if (entity.hits <= 0) array_push(global.effects, new str_effect(entity.solid ? spr_spark : spr_poof, (x + entity.x) / 2, (y + entity.y) / 2, 0.5));
+						else array_push(global.effects, new str_effect(spr_poof, (x + entity.x) / 2, (y + entity.y) / 2, 0.5));
 					}
 				}
 			}
@@ -216,11 +218,13 @@ function str_entity(_spr, _x = WIDTH / 2, _y = -1, _actions = noone, _parent = n
 					if (entity.x == x && entity.y == y + offset)
 					{
 						entity.hits--;
-						if (entity.hits <= 0) array_push(global.effects, new str_effect(spr_charge, entity.x, entity.y, 1));
-						if (entity.solid) finished = true;
+						if (entity.hits <= 0) array_push(global.effects, new str_effect(entity.solid ? spr_spark : spr_poof, entity.x, entity.y, 1));
+						else array_push(global.effects, new str_effect(spr_poof, entity.x, entity.y, 1));
+						//if (entity.solid) finished = true;
 					}
 				}
-				array_push(global.effects, new str_effect(spr_laser, x, y + offset));
+				if (abs(offset) > 1) array_push(global.effects, new str_effect(action.laser_up ? spr_laser_up : spr_laser_down, x, y + offset));
+				else array_push(global.effects, new str_effect(action.laser_up ? spr_laser_start_up : spr_laser_start_down, x, y + offset));
 				if (y + offset <= 0 || y + offset >= HEIGHT - 1) finished = true;
 			}
 		}
