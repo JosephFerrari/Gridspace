@@ -8,49 +8,11 @@
 
 // Entity Pool
 
-global.entities = ds_list_create();
-active_entity = noone;
-transition = 0;
-
-
-function next_entity()
-{
-	var index = ds_list_find_index(global.entities, active_entity) + 1;
-	if (active_entity.y < 0 || active_entity.y + active_entity.h > HEIGHT)
-	{
-		index--;
-		ds_list_delete(global.entities, index);
-		delete active_entity;
-	}
-	for (var i = 0; i < ds_list_size(global.entities); i++)
-	{
-		var entity = global.entities[| i];
-		if (entity.hits <= 0)
-		{
-			if (i <= index) index--;
-			ds_list_delete(global.entities, i);
-			delete entity;
-			i--;
-		}
-	}
-	if (index < ds_list_size(global.entities)) active_entity = global.entities[| index];
-	else
-	{
-		if (queue_pos < array_length(queue) && queue[queue_pos].turn == turn)
-		{
-			active_entity = queue[queue_pos].spawn();
-			queue_pos++;
-		}
-		else
-		{
-			active_entity = noone;
-			turn++;
-		}
-	}
-}
+global.entities = array_create(0);
+transition = 1;
 
 player = new str_entity(spr_player, WIDTH / 2, HEIGHT / 2);
-ds_list_add(global.entities, player);
+array_push(global.entities, player);
 
 // Entity Queue
 

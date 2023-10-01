@@ -8,32 +8,52 @@ var up = keyboard_check_pressed(vk_up);
 var down = keyboard_check_pressed(vk_down);
 var shoot = keyboard_check_pressed(vk_space);
 
-// Player
+// Action
 
-if (active_entity == noone)
+if (transition >= 1)
 {
-	if (left) player.actions[0] = action_move_x(-1);
-	if (right) player.actions[0] = action_move_x(1);
-	if (up) player.actions[0] = action_move_y(-1);
-	if (down) player.actions[0] = action_move_y(1);
-	if (shoot) player.actions[0] = action_shoot(-1);
-	if (left || right || up || down || shoot) active_entity = player;
-}
-
-// Action Queue
-
-if (active_entity != noone)
-{
-	if (transition <= 0)
+	if (left) player.actions[0] = action.move_left;
+	if (right) player.actions[0] = action.move_right;
+	if (up) player.actions[0] = action.move_up;
+	if (down) player.actions[0] = action.move_down;
+	if (shoot) player.actions[0] = action.shoot_up;
+	if (left || right || up || down || shoot)
 	{
-		active_entity.act();
+		while (queue_pos < array_length(queue) && queue[queue_pos].turn == turn)
+		{
+			queue[queue_pos].spawn();
+			queue_pos++;
+		}
+		array_foreach(global.entities, function(_entity) { _entity.set_up(); });
+		array_foreach(global.entities, function(_entity) { _entity.propose(); });
+		array_foreach(global.entities, function(_entity) { _entity.check_collision(); });
+		array_foreach(global.entities, function(_entity) { _entity.retract(); });
+		array_foreach(global.entities, function(_entity) { _entity.check_collision(); });
+		array_foreach(global.entities, function(_entity) { _entity.check_hits(false); });
+		array_foreach(global.entities, function(_entity) { _entity.check_hits(true); });
+		array_foreach(global.entities, function(_entity) { _entity.lock(); });
+		array_foreach(global.entities, function(_entity) { _entity.wrap_up(); });
 		transition = 0;
 	}
+}
+else
+{
 	transition += (delta_time / 1000000) * 10;
 	if (transition >= 1)
 	{
-		transition = 0;
-		next_entity();
+		for (var i = 0; i < array_length(global.entities); i++)
+		{
+			var entity = global.entities[i];
+			if (entity.hits <= 0 || entity.x < 0 || entity.x + entity.w > WIDTH || entity.y < 0 || entity.y + entity.h > HEIGHT)
+			{
+				array_delete(global.entities, i, 1);
+				array_foreach(entity.actions, function(_action) { delete _action; });
+				delete entity;
+				i--;
+			}
+		}
+		transition = 1;
+		turn++;
 	}
 }
 
