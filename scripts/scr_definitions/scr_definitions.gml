@@ -174,8 +174,8 @@ function str_entity(_spr, _x = WIDTH / 2, _y = -1, _actions = noone, _parent = n
 					if (evil != entity.evil)
 					{
 						entity.hits--;
-						if (entity.hits <= 0) array_push(global.effects, new str_effect(entity.solid ? spr_spark : spr_poof, entity.x_proposal, entity.y_proposal, 1));
-						else array_push(global.effects, new str_effect(spr_poof, entity.x_proposal, entity.y_proposal, 1));
+						if (entity.hits <= 0) array_push(global.effects, new str_effect(entity.solid ? spr_spark : spr_poof, x_proposal, y_proposal, 1));
+						else array_push(global.effects, new str_effect(spr_poof, x_proposal, y_proposal, 1));
 					}
 				}
 				if (x_proposal < entity.x + entity.w && x_proposal + w > entity.x && y_proposal < entity.y + entity.h && y_proposal + h > entity.y && x < entity.x_proposal + entity.w && x + w > entity.x_proposal && y < entity.y_proposal + entity.h && y + h > entity.y_proposal)
@@ -186,8 +186,8 @@ function str_entity(_spr, _x = WIDTH / 2, _y = -1, _actions = noone, _parent = n
 					{
 						entity.hits--;
 						entity.passed = true;
-						if (entity.hits <= 0) array_push(global.effects, new str_effect(entity.solid ? spr_spark : spr_poof, (x + entity.x) / 2, (y + entity.y) / 2, 0.5));
-						else array_push(global.effects, new str_effect(spr_poof, (x + entity.x) / 2, (y + entity.y) / 2, 0.5));
+						if (entity.hits <= 0) array_push(global.effects, new str_effect(entity.solid ? spr_spark : spr_poof, x, (y + entity.y) / 2, 0.5));
+						else array_push(global.effects, new str_effect(spr_poof, x, (y + entity.y) / 2, 0.5));
 					}
 				}
 			}
@@ -226,11 +226,11 @@ function str_entity(_spr, _x = WIDTH / 2, _y = -1, _actions = noone, _parent = n
 				{
 					var entity = global.entities[i];
 					if (entity == self || entity.hits <= 0 || entity.evil == evil) continue;
-					if (entity.x == x + projectile_offset && entity.y == y + offset)
+					if (x + projectile_offset >= entity.x && x + projectile_offset < entity.x + entity.w && entity.y == y + offset)
 					{
 						entity.hits--;
-						if (entity.hits <= 0) array_push(global.effects, new str_effect(entity.solid ? spr_spark : spr_poof, entity.x, entity.y, 1));
-						else array_push(global.effects, new str_effect(spr_poof, entity.x, entity.y, 1));
+						if (entity.hits <= 0) array_push(global.effects, new str_effect(entity.solid ? spr_spark : spr_poof, x + projectile_offset, entity.y, 1));
+						else array_push(global.effects, new str_effect(spr_poof, x + projectile_offset, entity.y, 1));
 						//if (entity.solid) finished = true;
 					}
 				}
