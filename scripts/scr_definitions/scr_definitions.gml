@@ -134,7 +134,7 @@ function str_entity(_spr, _x = WIDTH / 2, _y = -1, _actions = noone, _parent = n
 	{
 		if (!solid && hits > 0)
 		{
-			passed = false;
+			if (!_solid) passed = false;
 			for (var i = 0; i < array_length(global.entities); i++)
 			{
 				var entity = global.entities[i];
@@ -142,14 +142,17 @@ function str_entity(_spr, _x = WIDTH / 2, _y = -1, _actions = noone, _parent = n
 				if (x_proposal < entity.x_proposal + entity.w && x_proposal + w > entity.x_proposal && y_proposal < entity.y_proposal + entity.h && y_proposal + h > entity.y_proposal)
 				{
 					hits--;
-					entity.hits--;
+					if (evil != entity.evil) entity.hits--;
 				}
 				if (x_proposal < entity.x + entity.w && x_proposal + w > entity.x && y_proposal < entity.y + entity.h && y_proposal + h > entity.y && x < entity.x_proposal + entity.w && x + w > entity.x_proposal && y < entity.y_proposal + entity.h && y + h > entity.y_proposal)
 				{
 					hits--;
-					entity.hits--;
 					passed = true;
-					entity.passed = true;
+					if (evil != entity.evil)
+					{
+						entity.hits--;
+						entity.passed = true;
+					}
 				}
 			}
 		}
